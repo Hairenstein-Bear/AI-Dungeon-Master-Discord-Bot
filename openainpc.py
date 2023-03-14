@@ -1,16 +1,16 @@
 import openai
-import io
-import time
 import random
-import asyncio
 import nextcord
 from nextcord.ext import commands
-# or .all() if you ticked all, that is easier
+# next cord documentation: https://docs.nextcord.dev/en/stable/
+
+# this function is all chatGPT stuff
 
 
 def getNpc(characteristics):
     openai.api_key = "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"
     MODEL = "gpt-3.5-turbo"
+    # temperature is the variable that sets how complex the response can be the higher the number the higher the complexity
     temperature = random.uniform(.5, 1.0)
     response = openai.ChatCompletion.create(
         model=MODEL,
@@ -24,7 +24,8 @@ def getNpc(characteristics):
     return response['choices'][0]['message']['content']
 
 
-botkey = "MTA4NTIyNzk4OTAxMDIzMTM1Ng.GiaMjN.gVWnrXBFC1-Wa2FV3cEnh2jxH3E5DZIo9wn8XQ"
+# discord api key to identify the bot
+botkey = "MTA4NTIyNzk4OTAxMDIzMTM1Ng.GTZKt0.aB5C3kzfPD3uYehwfuOgAn8LlmPsV2SrZ8YEVk"
 bot = commands.Bot()
 
 
@@ -32,15 +33,17 @@ bot = commands.Bot()
 async def on_ready():
     print(f'We have logged in as {bot.user}')
 
+# guild id is the channel id I assume there is a way to set this dynamically but I just did it manually since there are only so many
+# channels where I might use the bot
+
 
 @bot.slash_command(guild_ids=[639278542382694401, 348564060846948363, 934954222829584435, 878487240383295549])
 async def npc(interaction: nextcord.Interaction, characteristics: str):
-    """Say hi to a user"""
-    # defer the response, so we can take a long time to respond
+    # defer the response, so we can take a long time to respond, by default discord give you 3 seconds to send a response
     await interaction.response.defer()
-    # do something that takes a long time
+    # call getNpc to generate the character this takes about 5-10 seconds usually sometimes longer
     npc = getNpc(characteristics)
-    # followup must be used after defer since a response is already sent
+    # followup must be used after defer since a response is already sent this updates the message to include the generated character
     await interaction.followup.send(npc)
 
 bot.run(botkey)
