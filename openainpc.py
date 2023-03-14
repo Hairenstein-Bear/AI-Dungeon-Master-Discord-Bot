@@ -2,13 +2,14 @@ import openai
 import random
 import nextcord
 from nextcord.ext import commands
+import config
 # next cord documentation: https://docs.nextcord.dev/en/stable/
 
 # this function is all chatGPT stuff
 
 
 def getNpc(characteristics):
-    openai.api_key = "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"
+    openai.api_key = config.openaikey
     MODEL = "gpt-3.5-turbo"
     # temperature is the variable that sets how complex the response can be the higher the number the higher the complexity
     temperature = random.uniform(.5, 1.0)
@@ -25,7 +26,7 @@ def getNpc(characteristics):
 
 
 # discord api key to identify the bot
-botkey = "MTA4NTIyNzk4OTAxMDIzMTM1Ng.GTZKt0.aB5C3kzfPD3uYehwfuOgAn8LlmPsV2SrZ8YEVk"
+# botkey = "MTA4NTIyNzk4OTAxMDIzMTM1Ng.GTZKt0.aB5C3kzfPD3uYehwfuOgAn8LlmPsV2SrZ8YEVk"
 bot = commands.Bot()
 
 
@@ -46,4 +47,4 @@ async def npc(interaction: nextcord.Interaction, characteristics: str):
     # followup must be used after defer since a response is already sent this updates the message to include the generated character
     await interaction.followup.send(npc)
 
-bot.run(botkey)
+bot.run(config.botkey)
